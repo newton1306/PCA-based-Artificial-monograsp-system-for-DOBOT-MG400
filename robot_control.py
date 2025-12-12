@@ -124,6 +124,13 @@ class DobotController:
             print("✗ ยังไม่ได้เชื่อมต่อ robot")
             return False
         
+        # Safety check: Enforce Z minimum limit
+        if hasattr(self.config, 'ROBOT_Z_MIN'):
+            if z < self.config.ROBOT_Z_MIN:
+                print(f"⚠️ Z={z}mm is below safe limit ({self.config.ROBOT_Z_MIN}mm)")
+                z = self.config.ROBOT_Z_MIN
+                print(f"   → Clamped to Z={z}mm")
+        
         try:
             self.robot.move_to(x, y, z, r, wait=wait)
             if wait:
