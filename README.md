@@ -1,4 +1,4 @@
-# 🤖 PCA-based-Artificial-monograsp-system-for-DOBOT-MG400 (V15)
+# 🤖 PCA-based Artificial monograsp system for DOBOT MG400 (V15)
 
 **Automated Object Grasping with LIDAR + Camera + Dobot MG400**
 
