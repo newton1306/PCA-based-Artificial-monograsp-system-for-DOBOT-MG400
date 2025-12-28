@@ -48,10 +48,11 @@ The system intelligently analyzes object geometry to determine the best grasp st
 ```
       Before Analysis                  After Analysis                   Gripper Approach
       ┌─────────────────┐              ┌─────────────────┐              ┌─────────────────┐
-      │   ████    ████  │              │   ████    ████  │              │   ████ ││ ████  │
-      │   ████ ⭕ ████  │     →        │   ████ ⭕→████  │      →       │   ████ ││ ████  │
-      │   ████    ████  │              │   ████    ████  │              │   ████ ││ ████  │
-      │                 │              │  Radial Grasp   │              │      Gripper     │
+      │    ╭───────╮    │              │    ╭───────╮    │              │    ╭───────╮    │
+      │   ╱         ╲   │              │   ╱    ⭕   ╲   │              │   ╱   ││    ╲   │
+      │  │     ○     │  │     →        │  │  ←──┼──→ │  │      →       │  │    ││     │  │
+      │   ╲         ╱   │              │   ╲  Center ╱   │              │   ╲  Grip   ╱   │
+      │    ╰───────╯    │              │    ╰───────╯    │              │    ╰───────╯    │
       └─────────────────┘              └─────────────────┘              └─────────────────┘
       Donut Detected                   Detects hole center              Grips across ring
                                        & ring thickness                 thickness (radial)
