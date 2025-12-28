@@ -1,28 +1,74 @@
-# 🤖 LIDAR Grasp Detection System v13
+# 🤖 LIDAR Grasp Detection System v15
 
-**ระบบหยิบจับวัตถุอัตโนมัติด้วย LIDAR + Camera + Dobot MG400**
+**Automated Object Grasping with LIDAR + Camera + Dobot MG400**
+
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/newton1306/PCA-based-Artificial-monograsp-system-for-DOBOT-MG400/tree/main/)
 
 ## ✨ Overview
 
-ระบบ Grasp Detection สำหรับหุ่นยนต์ Dobot MG400 ที่ใช้ **LIDAR** วัดความสูงวัตถุจริง และ **Camera** ตรวจจับตำแหน่ง ทำให้หยิบจับวัตถุได้แม่นยำ
+A precision grasp detection system for the Dobot MG400 robot that uses **LIDAR** for accurate height measurement and **Camera** for position detection, enabling reliable object grasping even with challenging geometries.
 
-### Key Features
+https://github.com/user-attachments/assets/08dd2ed0-1858-46b1-abf9-8b015db5c840
 
-- ✅ **ไม่ใช้ YOLO** - ใช้ Color + Edge Detection (เร็วกว่า)
-- ✅ **LIDAR วัดความสูง** - แม่นยำกว่า Depth Camera
-- ✅ **Height-based Correction** - ปรับ Z ตามความสูงวัตถุ
-- ✅ **PCA Grasp Selection** - หามุมจับที่เหมาะสม
-- ✅ **Self-contained** - ทุกอย่างอยู่ใน Notebook เดียว
+### 🎯 Key Capabilities
+
+- ✅ **Universal Grasping** - Handles both **solid objects** and **donut-shaped objects** (with holes)
+- ✅ **Intelligent Grasp Selection** - Uses PCA-based algorithm to determine optimal grip points
+- ✅ **No YOLO Required** - Fast Color + Edge Detection approach
+- ✅ **LIDAR Height Measurement** - More accurate than depth cameras
+- ✅ **Height-based Correction** - Adaptive Z-axis adjustment
+- ✅ **Self-contained** - Everything in a single notebook
+
+---
+
+## 🔍 Grasp Intelligence
+
+The system intelligently analyzes object geometry to determine the best grasp strategy:
+
+### For Solid Objects
+```
+┌─────────────────┐
+│   ████████████  │ → Gripper approaches from longest axis
+│   ████████████  │    for maximum stability
+│   ████████████  │
+└─────────────────┘
+```
+
+### For Donut-Shaped Objects
+```
+┌─────────────────┐
+│   ████    ████  │ → Gripper detects hole and grips
+│   ████    ████  │    across the ring for secure hold
+│   ████    ████  │
+└─────────────────┘
+```
+
+### Decision Process Visualization
+
+The system visualizes its grasp decision in real-time:
+
+```
+Original Image → Contour Detection → PCA Analysis → Grasp Point Selection
+     📷              🔍                  📐              ✋
+                                                        
+[Object]         [Edges]           [Orientation]    [Grip Position]
+```
+
+Each detected object shows:
+- **Green rectangle**: Object bounding box
+- **Red line**: Primary grasp axis (from PCA)
+- **Blue crosshair**: Calculated grip center point
+- **Angle overlay**: Gripper rotation angle
 
 ---
 
 ## 🛠️ Hardware Requirements
 
-| อุปกรณ์ | รายละเอียด |
-|---------|------------|
+| Component | Details |
+|-----------|---------|
 | **Robot** | Dobot MG400 (TCP/IP: 192.168.1.6) |
 | **Camera** | USB Camera |
-| **LIDAR** | TF-Luna via ESP32 (COM9) |
+| **LIDAR** | TF-Luna ToF Sensor via ESP32 (COM9) |
 | **Gripper** | Servo Gripper via ESP32 |
 
 ---
@@ -30,11 +76,14 @@
 ## 📂 File Structure
 
 ```
-├── 13_sc_best_lidar_grasp_v13_new.ipynb  # ⭐ Main notebook
-├── calibrate_for_v13.ipynb               # Calibration notebook
-├── homography_matrix.npy                  # Camera-Robot matrix
-├── calibration_values_v13.txt             # Saved calibration
-└── esp32_gripper_lidar_v11/               # ESP32 code
+├── 15_use_this_auto_pick_v15.ipynb       # ⭐ Main execution notebook
+├── calibrate_for_v15.ipynb               # Calibration notebook
+├── homography_matrix.npy                  # Camera-Robot transformation matrix
+├── calibration_values_v15.txt             # Saved calibration parameters
+├── esp32_gripper_lidar_v15/
+│   └── esp32_gripper_lidar_v11.ino       # ESP32 firmware
+└── .agent/
+    └── workflows/                         # System workflow diagrams
 ```
 
 ---
@@ -47,30 +96,32 @@
 pip install opencv-python numpy pyserial
 ```
 
-### 2. Calibration (ครั้งแรก)
+### 2. Initial Calibration
 
 ```bash
-jupyter notebook calibrate_for_v13.ipynb
+jupyter notebook calibrate_for_v15.ipynb
 ```
 
-Run ทุก cell เพื่อ calibrate:
-1. **PIXELS_PER_MM** - วัดไม้บรรทัด
-2. **HOMOGRAPHY_MATRIX** - 4-point calibration
-3. **ROBOT_R_OFFSET** - ปรับมุม gripper
-4. **Z_FLOOR** - ความสูงพื้น
+Run all cells to calibrate:
+1. **PIXELS_PER_MM** - Measure with ruler
+2. **HOMOGRAPHY_MATRIX** - 4-point camera-robot calibration
+3. **ROBOT_R_OFFSET** - Adjust gripper rotation
+4. **Z_FLOOR** - Floor height reference
 5. **LIDAR offsets** - X, Y, Physical, Correction
-6. **HEIGHT_CORRECTION_FACTOR** - ปรับตามความสูง
-7. **Gripper widths** - วัดความกว้าง
+6. **HEIGHT_CORRECTION_FACTOR** - Height-based adjustment
+7. **Gripper widths** - Measure gripper dimensions
+
+Calibration results are saved to `homography_matrix.npy` and `calibration_values_v15.txt`.
 
 ### 3. Run Main System
 
 ```bash
-jupyter notebook 13_sc_best_lidar_grasp_v13_new.ipynb
+jupyter notebook 15_use_this_auto_pick_v15.ipynb
 ```
 
 ---
 
-## ⚙️ Configuration (v13)
+## ⚙️ Configuration (v15)
 
 ```python
 # Camera Calibration
@@ -108,58 +159,109 @@ MAX_OBJECT_AREA = 50000
 
 | Key | Action |
 |-----|--------|
-| **Click** | เลือกวัตถุ |
-| **SPACE** | Execute Pick |
-| **H** | Home Robot |
-| **R** | Reset Selection |
-| **C** | Reconnect All |
-| **Q** | Quit |
+| **Click** | Select object to grasp |
+| **SPACE** | Execute pick sequence |
+| **H** | Home robot |
+| **R** | Reset selection |
+| **C** | Reconnect all devices |
+| **Q** | Quit application |
 
 ---
 
-## 📊 How It Works
+## 📊 System Architecture
 
 ```
 ┌─────────────┐    ┌──────────────┐    ┌─────────────┐
-│   Camera    │───>│   Detection  │───>│ PCA Grasp   │
-│  (Color+    │    │  (Saturation │    │  Selector   │
-│   Edge)     │    │   + Edge)    │    │             │
+│   Camera    │───>│  Detection   │───>│ PCA Grasp   │
+│  (Color +   │    │ (Saturation  │    │  Analysis   │
+│   Edge)     │    │  + Edge)     │    │             │
 └─────────────┘    └──────────────┘    └──────┬──────┘
                                               │
-┌─────────────┐    ┌──────────────┐    ┌──────▼──────┐
-│   Gripper   │<───│    Robot     │<───│   LIDAR     │
-│   (Grip)    │    │  (MovJ/Z)    │    │  (Height)   │
+                                              │ Grasp Point
+                                              │ + Angle
+                                              ▼
+┌─────────────┐    ┌──────────────┐    ┌─────────────┐
+│  Gripper    │<───│    Robot     │<───│   LIDAR     │
+│  Control    │    │  (MovJ/Z)    │    │  (Height)   │
 └─────────────┘    └──────────────┘    └─────────────┘
 ```
 
-### LIDAR Z Calculation (v13)
+### Grasp Selection Algorithm
+
+1. **Object Detection**: Color saturation + Edge detection
+2. **Contour Analysis**: Extract object boundaries
+3. **PCA Computation**: Calculate principal axes
+4. **Geometry Check**: Detect solid vs donut-shaped objects
+5. **Grasp Point**: Select optimal grip center and orientation
+6. **Height Measurement**: LIDAR measures precise Z coordinate
+7. **Execution**: Robot moves to grasp with calculated parameters
+
+### LIDAR Z Calculation (v15)
 
 ```python
+# Base height from LIDAR reading
 z_base = Z_MEASURE - lidar_reading + LIDAR_PHYSICAL_OFFSET
+
+# Apply LIDAR calibration correction
 z_corrected = z_base + LIDAR_CORRECTION
+
+# Height-based dynamic correction
 height_correction = estimated_height * HEIGHT_CORRECTION_FACTOR
+
+# Final grasp height
 z_grasp = z_corrected - height_correction
+```
+
+---
+
+## 🎯 Grasp Strategy Examples
+
+### Example 1: Rectangular Block
+```
+Input: Solid rectangular object
+PCA Analysis: Major axis = 120mm, Minor axis = 40mm
+Decision: Grip along major axis for stability
+Gripper Angle: Aligned with major axis
+Result: ✅ Successful grasp
+```
+
+### Example 2: Donut Object
+```
+Input: Ring-shaped object with center hole
+PCA Analysis: Detects hollow center region
+Decision: Grip across ring thickness
+Gripper Angle: Perpendicular to ring axis
+Result: ✅ Successful grasp without interference
 ```
 
 ---
 
 ## 🔧 Troubleshooting
 
-### ❌ ไม่เจอวัตถุ
-- ปรับ `MIN_OBJECT_AREA` / `MAX_OBJECT_AREA`
-- ตรวจสอบแสง (ควรสม่ำเสมอ)
+### ❌ Objects not detected
+- Adjust `MIN_OBJECT_AREA` / `MAX_OBJECT_AREA` parameters
+- Ensure consistent lighting conditions
+- Check camera focus
 
-### ❌ Gripper ลงลึกเกินไป
-- เพิ่ม `HEIGHT_CORRECTION_FACTOR`
-- ตรวจสอบ `LIDAR_CORRECTION`
+### ❌ Gripper descends too deep
+- Increase `HEIGHT_CORRECTION_FACTOR`
+- Verify `LIDAR_CORRECTION` value
+- Recalibrate Z_FLOOR
 
-### ❌ Gripper ไม่ถึงวัตถุ
-- ลด `HEIGHT_CORRECTION_FACTOR`
-- ตรวจสอบ `LIDAR_PHYSICAL_OFFSET`
+### ❌ Gripper doesn't reach object
+- Decrease `HEIGHT_CORRECTION_FACTOR`
+- Check `LIDAR_PHYSICAL_OFFSET`
+- Verify LIDAR sensor connection
 
-### ❌ พิกัด X,Y ผิด
-- Recalibrate `HOMOGRAPHY_MATRIX`
-- ตรวจสอบ `LIDAR_X_OFFSET` / `LIDAR_Y_OFFSET`
+### ❌ X,Y coordinates incorrect
+- Recalibrate `HOMOGRAPHY_MATRIX` using calibration notebook
+- Verify `LIDAR_X_OFFSET` / `LIDAR_Y_OFFSET`
+- Check camera mounting stability
+
+### ❌ Poor grasp on donut objects
+- Verify PCA algorithm is detecting hole correctly
+- Adjust gripper open/grip margins
+- Check object size vs gripper capacity
 
 ---
 
@@ -167,21 +269,40 @@ z_grasp = z_corrected - height_correction
 
 | Version | Changes |
 |---------|---------|
-| v13 | ✅ Color+Edge Detection (No YOLO), Height-based Correction |
-| v12 | LIDAR correction factor |
+| v15 | ✅ Enhanced donut object detection, Improved grasp visualization |
+| v13 | Color+Edge Detection (No YOLO), Height-based Correction |
+| v12 | LIDAR correction factor implementation |
 | v11 | Basic LIDAR integration |
-| v10 | Hybrid Depth+LIDAR |
+| v10 | Hybrid Depth+LIDAR approach |
 
 ---
 
-## 📝 Credits
+## 🔗 Additional Resources
 
-- **Robot**: [Dobot MG400](https://www.dobot-robots.com/products/desktop-four-axis/mg400.html)
-- **LIDAR**: TF-Luna ToF Sensor
-- **Detection**: OpenCV Color + Edge Detection
-- **Grasp**: PCA-based Grasp Selection
+- **GitHub Repository**: [PCA-based Artificial Monograsp System](https://github.com/newton1306/PCA-based-Artificial-monograsp-system-for-DOBOT-MG400/tree/main/)
+- **Robot Documentation**: [Dobot MG400](https://www.dobot-robots.com/products/desktop-four-axis/mg400.html)
+- **LIDAR Sensor**: TF-Luna ToF Distance Sensor
+- **Detection Method**: OpenCV Color + Edge Detection
+- **Grasp Algorithm**: PCA-based Orientation Analysis
 
 ---
 
-**Version**: 13.0 (LIDAR Grasp - No YOLO)  
-**Last Updated**: December 2025
+## 📝 Technical Credits
+
+- **Robot Platform**: Dobot MG400 Desktop Robot
+- **Sensor**: TF-Luna LIDAR ToF Sensor
+- **Computer Vision**: OpenCV (Color + Edge Detection)
+- **Grasp Planning**: Principal Component Analysis (PCA)
+- **Microcontroller**: ESP32 for LIDAR and Gripper control
+
+---
+
+## 📄 License
+
+See repository for license details.
+
+---
+
+**Version**: 15.0 (Universal LIDAR Grasp - Solid & Donut Objects)  
+**Last Updated**: December 2025  
+**Maintained by**: Newton1306
