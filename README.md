@@ -23,23 +23,45 @@ A precision grasp detection system for the Dobot MG400 robot that uses **LIDAR**
 
 The system intelligently analyzes object geometry to determine the best grasp strategy:
 
-### For Solid Objects
+### Strategy 1: Solid Objects (PCA Method)
+
 ```
-┌─────────────────┐
-│   ████████████  │ → Gripper approaches from longest axis
-│   ████████████  │    for maximum stability
-│   ████████████  │
-└─────────────────┘
+      Before PCA Analysis              After PCA Analysis              Gripper Approach
+      ┌─────────────────┐              ┌─────────────────┐              ┌─────────────────┐
+      │                 │              │    ↑ Minor      │              │    |  Gripper  | │
+      │   ████████████  │              │    │            │              │    | ▼      ▼ | │
+      │   ████████████  │     →        │    ●────────→   │      →       │   ████████████  │
+      │   ████████████  │              │   Major Axis    │              │   ████████████  │
+      │                 │              │                 │              │   ████████████  │
+      └─────────────────┘              └─────────────────┘              └─────────────────┘
+      Detected Object                  PCA finds longest axis           Grips along major axis
+                                       for optimal stability
 ```
 
-### For Donut-Shaped Objects
+**Method**: Principal Component Analysis (PCA)
+- Calculates object's major and minor axes
+- Gripper aligns with **major axis** for maximum stability
+- Best for: Rectangular, elongated, or solid irregular shapes
+
+### Strategy 2: Donut/Ring Objects (Radial Method)
+
 ```
-┌─────────────────┐
-│   ████    ████  │ → Gripper detects hole and grips
-│   ████    ████  │    across the ring for secure hold
-│   ████    ████  │
-└─────────────────┘
+      Before Analysis                  After Analysis                   Gripper Approach
+      ┌─────────────────┐              ┌─────────────────┐              ┌─────────────────┐
+      │   ████    ████  │              │   ████    ████  │              │   ████ ││ ████  │
+      │   ████ ⭕ ████  │     →        │   ████ ⭕→████  │      →       │   ████ ││ ████  │
+      │   ████    ████  │              │   ████    ████  │              │   ████ ││ ████  │
+      │                 │              │  Radial Grasp   │              │      Gripper     │
+      └─────────────────┘              └─────────────────┘              └─────────────────┘
+      Donut Detected                   Detects hole center              Grips across ring
+                                       & ring thickness                 thickness (radial)
 ```
+
+**Method**: Radial Grasp Detection
+- Detects hollow center region (hole)
+- Calculates optimal **radial grip points** across ring
+- Avoids center hole interference
+- Best for: Donuts, rings, washers, hollow circular objects
 
 ### Decision Process Visualization
 
