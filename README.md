@@ -1,10 +1,11 @@
-<img width="1587" height="2245" alt="pos" src="https://github.com/user-attachments/assets/feadc646-2681-4ef3-b11b-fa096047162a" /># 🤖 PCA-based Artificial monograsp system for DOBOT MG400 (V15)
+🤖 PCA-based Artificial monograsp system for DOBOT MG400 (V15)
 
 **Automated Object Grasping with LIDAR + Camera + Dobot MG400**
 
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/newton1306/PCA-based-Artificial-monograsp-system-for-DOBOT-MG400/tree/main/)
-
+<img width="1587" height="2245" alt="pos" src="https://github.com/user-attachments/assets/feadc646-2681-4ef3-b11b-fa096047162a" /># 
 <img width="1587" height="2245" alt="pos" src="https://github.com/user-attachments/assets/b0d0719a-5992-4693-bf1c-8927597a5e69" />
+
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/newton1306/PCA-based-Artificial-monograsp-system-for-DOBOT-MG400/tree/main/)
 
 ## ✨ Overview
 
