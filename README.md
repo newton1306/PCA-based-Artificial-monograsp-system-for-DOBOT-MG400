@@ -6,48 +6,6 @@
 
 ระบบ Grasp Detection สำหรับหุ่นยนต์ Dobot MG400 ที่ใช้ **LIDAR** วัดความสูงวัตถุจริง และ **Camera** ตรวจจับตำแหน่ง ทำให้หยิบจับวัตถุได้แม่นยำ
 
-flowchart TB
-    subgraph INPUT["📷 INPUT"]
-        CAM[Camera Feed]
-        LIDAR[LIDAR Sensor]
-    end
-    
-    subgraph VISION["🔍 COMPUTER VISION"]
-        SEG[Color Segmentation]
-        MORPH[Morphology]
-        CONTOUR[Contour Detection]
-        DONUT[Donut Classification]
-    end
-    
-    subgraph STATE["⚙️ STATE MACHINE"]
-        IDLE[IDLE]
-        DETECT[DETECTED]
-        STABLE[STABLE]
-        COUNT[COUNTDOWN]
-        PICK[PICKING]
-    end
-    
-    subgraph GRASP["🎯 GRASP PLANNING"]
-        PCA[PCA Analysis]
-        RADIAL[Radial Method]
-        SELECT[Grasp Selection]
-    end
-    
-    subgraph ROBOT["🤖 ROBOT CONTROL"]
-        COORD[Coordinate Transform]
-        HEIGHT[Height Calculation]
-        MOTION[Motion Control]
-        GRIP[Gripper Control]
-    end
-    
-    CAM --> SEG --> MORPH --> CONTOUR --> DONUT
-    DONUT --> IDLE --> DETECT --> STABLE --> COUNT --> PICK
-    DONUT --> PCA & RADIAL --> SELECT
-    LIDAR --> HEIGHT
-    SELECT --> COORD --> MOTION --> GRIP
-    HEIGHT --> MOTION
-
-
 ### Key Features
 
 - ✅ **ไม่ใช้ YOLO** - ใช้ Color + Edge Detection (เร็วกว่า)
