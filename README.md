@@ -62,8 +62,10 @@ flowchart TB
 - ✅ **Self-contained** - Everything in a single notebook
 
 ---
-Note: The execution speed in this demo is intentionally slowed down for testing and safety validation. It is not a limitation of the algorithm or the hardware.
-https://github.com/user-attachments/assets/179da8aa-e3a6-4142-b3bb-b2f6fadb9ea3
+[Note: The execution speed in this demo is intentionally slowed down for testing and safety validation. It is not a limitation of the algorithm or the hardware.
+https://github.com/user-attachments/assets/179da8aa-e3a6-4142-b3bb-b2f6fadb9ea3](https://github.com/user-attachments/assets/179da8aa-e3a6-4142-b3bb-b2f6fadb9ea3
+
+> ⚠️ **Note on Speed:** The execution speed in this demo is **intentionally slowed down** for testing and safety validation purposes. This pacing does not reflect the actual processing speed of the algorithm or the mechanical limits of the MG400 robot.)
 
 ## 🔍 Grasp Intelligence
 
