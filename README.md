@@ -1,4 +1,4 @@
-# 🤖 LIDAR Grasp Detection System v15
+# 🤖 PCA-based-Artificial-monograsp-system-for-DOBOT-MG400 (V15)
 
 **Automated Object Grasping with LIDAR + Camera + Dobot MG400**
 
@@ -62,7 +62,7 @@ flowchart TB
 
 ---
 
-
+https://github.com/user-attachments/assets/179da8aa-e3a6-4142-b3bb-b2f6fadb9ea3
 
 ## 🔍 Grasp Intelligence
 
@@ -145,9 +145,8 @@ Each detected object shows:
 ├── 15_use_this_auto_pick_v15.ipynb       # ⭐ Main execution notebook
 ├── calibrate_for_v15.ipynb               # Calibration notebook
 ├── homography_matrix.npy                  # Camera-Robot transformation matrix
-├── calibration_values_v15.txt             # Saved calibration parameters
 ├── esp32_gripper_lidar_v15/
-│   └── esp32_gripper_lidar_v11.ino       # ESP32 firmware
+│   └── esp32_gripper_lidar_v15.ino       # ESP32 firmware
 └── .agent/
     └── workflows/                         # System workflow diagrams
 ```
@@ -218,19 +217,6 @@ GRIPPER_GRIP_MARGIN_MM = 5
 MIN_OBJECT_AREA = 800
 MAX_OBJECT_AREA = 50000
 ```
-
----
-
-## 🎮 Controls
-
-| Key | Action |
-|-----|--------|
-| **Click** | Select object to grasp |
-| **SPACE** | Execute pick sequence |
-| **H** | Home robot |
-| **R** | Reset selection |
-| **C** | Reconnect all devices |
-| **Q** | Quit application |
 
 ---
 
