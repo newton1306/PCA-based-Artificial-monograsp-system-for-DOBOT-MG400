@@ -8,7 +8,50 @@
 
 A precision grasp detection system for the Dobot MG400 robot that uses **LIDAR** for accurate height measurement and **Camera** for position detection, enabling reliable object grasping even with challenging geometries.
 
-https://github.com/user-attachments/assets/08dd2ed0-1858-46b1-abf9-8b015db5c840
+```
+flowchart TB
+    subgraph INPUT["📷 INPUT"]
+        CAM[Camera Feed]
+        LIDAR[LIDAR Sensor]
+    end
+    
+    subgraph VISION["🔍 COMPUTER VISION"]
+        SEG[Color Segmentation]
+        MORPH[Morphology]
+        CONTOUR[Contour Detection]
+        DONUT[Donut Classification]
+    end
+    
+    subgraph STATE["⚙️ STATE MACHINE"]
+        IDLE[IDLE]
+        DETECT[DETECTED]
+        STABLE[STABLE]
+        COUNT[COUNTDOWN]
+        PICK[PICKING]
+    end
+    
+    subgraph GRASP["🎯 GRASP PLANNING"]
+        PCA[PCA Analysis]
+        RADIAL[Radial Method]
+        SELECT[Grasp Selection]
+    end
+    
+    subgraph ROBOT["🤖 ROBOT CONTROL"]
+        COORD[Coordinate Transform]
+        HEIGHT[Height Calculation]
+        MOTION[Motion Control]
+        GRIP[Gripper Control]
+    end
+    
+    CAM --> SEG --> MORPH --> CONTOUR --> DONUT
+    DONUT --> IDLE --> DETECT --> STABLE --> COUNT --> PICK
+    DONUT --> PCA & RADIAL --> SELECT
+    LIDAR --> HEIGHT
+    SELECT --> COORD --> MOTION --> GRIP
+    HEIGHT --> MOTION
+```
+
+https://github.com/user-attachments/assets/fd5f2670-fad6-4f56-9886-ad8cb6bfc485
 
 ### 🎯 Key Capabilities
 
